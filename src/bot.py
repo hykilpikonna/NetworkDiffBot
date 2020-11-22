@@ -26,7 +26,7 @@ if __name__ == '__main__':
     dispatcher = updater.dispatcher
 
     # Register commands
-    commands = [start, ls, touch, rm, mv, nano, interval, enable, disable]
+    commands = [start, ls, touch, rm, nano, interval, enable, disable]
     [dispatcher.add_handler(createCommand(cmd)) for cmd in commands]
 
     # Start bot

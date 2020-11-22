@@ -83,9 +83,6 @@ def rm(update, context):
     user = database.checkUser(chat.id)
 
 
-def mv(update, context):
-    chat = update.effective_chat
-    user = database.checkUser(chat.id)
 
 
 def nano(update, context):
