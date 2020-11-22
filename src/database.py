@@ -1,6 +1,7 @@
 import json
 
 from src.constants import dbPath
+from src.utils import toJson
 
 
 class Database:
@@ -10,5 +11,5 @@ class Database:
 
     def save(self):
         f = open(dbPath, 'w')
-        f.write(json.dumps(self))
+        f.write(toJson(self))
         f.close()
