@@ -26,6 +26,7 @@ class Database:
             print("Database loaded.")
 
     def checkUser(self, user):
+        user = str(user)
         if user not in self.users:
             self.users.append(user)
             self.userRequests[user] = {}
