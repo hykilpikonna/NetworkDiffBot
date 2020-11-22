@@ -19,7 +19,7 @@ if __name__ == '__main__':
     print("Bot created: ", bot.getMe())
 
     # Create updater
-    updater = Updater(bot=bot)
+    updater = Updater(bot=bot, use_context=True)
     dispatcher = updater.dispatcher
 
     # Register commands

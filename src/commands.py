@@ -1,6 +1,9 @@
 import re
 from io import BytesIO
 
+from telegram import Bot, Update
+from telegram.ext import Updater, CallbackContext
+
 from src.database import Database
 from src.utils import toJson, create
 
@@ -35,14 +38,14 @@ urlValidator = re.compile(
 database = Database()
 
 
-def start(update, context):
+def start(update: Update, context: CallbackContext):
     chat = update.effective_chat
     database.checkUser(chat.id)
 
     return helpMsg
 
 
-def ls(update, context):
+def ls(update: Update, context: CallbackContext):
     chat = update.effective_chat
     user = database.checkUser(chat.id)
     requests = database.userRequests[user]
@@ -50,7 +53,7 @@ def ls(update, context):
     return "Your requests: %s" % toJson(requests)
 
 
-def touch(update, context):
+def touch(update: Update, context: CallbackContext):
     chat = update.effective_chat
     user = database.checkUser(chat.id)
 
@@ -82,7 +85,7 @@ def touch(update, context):
     return "%s is successfully created!" % name
 
 
-def rm(update, context):
+def rm(update: Update, context: CallbackContext):
     chat = update.effective_chat
     user = database.checkUser(chat.id)
 
@@ -102,12 +105,12 @@ def rm(update, context):
     return "%s is successfully removed!" % name
 
 
-def nano(update, context):
+def nano(update: Update, context: CallbackContext):
     chat = update.effective_chat
     user = database.checkUser(chat.id)
 
 
-def test(update, context):
+def test(update: Update, context: CallbackContext):
     chat = update.effective_chat
     user = database.checkUser(chat.id)
 
@@ -130,16 +133,16 @@ def test(update, context):
     return 'Done!'
 
 
-def interval(update, context):
+def interval(update: Update, context: CallbackContext):
     chat = update.effective_chat
     user = database.checkUser(chat.id)
 
 
-def enable(update, context):
+def enable(update: Update, context: CallbackContext):
     chat = update.effective_chat
     user = database.checkUser(chat.id)
 
 
-def disable(update, context):
+def disable(update: Update, context: CallbackContext):
     chat = update.effective_chat
     user = database.checkUser(chat.id)
