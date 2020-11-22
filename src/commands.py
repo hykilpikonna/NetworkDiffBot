@@ -13,10 +13,10 @@ Welcome! This bot monitors http changes!
 /ls - List the http requests you've created
 /touch - Create a http request
 /rm - Delete a http request
-/mv - Rename a http request
 
 *Configuration Commands*
 /nano - Edit a http request
+/test - Test a http request
 /interval - Change the interval between the updates of a http request
 
 *Start/Stop Commands*
@@ -103,6 +103,11 @@ def rm(update, context):
 
 
 def nano(update, context):
+    chat = update.effective_chat
+    user = database.checkUser(chat.id)
+
+
+def test(update, context):
     chat = update.effective_chat
     user = database.checkUser(chat.id)
 
