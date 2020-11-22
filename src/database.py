@@ -30,5 +30,5 @@ class Database:
         if user not in self.users:
             self.users.append(user)
             self.userRequests[user] = {}
-            self.userStatus[user] = {}
+            self.userStatus[user] = {'enabledTasks': []}
         return user
