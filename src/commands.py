@@ -41,6 +41,15 @@ def touch(update, context):
     chat = update.effective_chat
     user = database.checkUser(chat.id)
 
+    # No args
+    if len(context.args) != 2:
+        return "用法: /touch <request name> <proper url>"
+
+    # Validate name
+    name = context.args[0]
+    if not name.isalnum():
+        return "只能有数字或者字母哦w"
+
 
 def rm(update, context):
     chat = update.effective_chat
