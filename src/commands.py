@@ -94,6 +94,9 @@ def startTask(user: str, taskName: str):
 def init(bot: Bot, u: Updater):
     global updater
     updater = u
+    for user in database.users:
+        for task in database.userStatus[user]['enabledTasks']:
+            startTask(user, task)
 
 
 def start(update: Update, context: CallbackContext):
