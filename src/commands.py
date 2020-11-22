@@ -82,7 +82,20 @@ def rm(update, context):
     chat = update.effective_chat
     user = database.checkUser(chat.id)
 
+    # No args
+    if len(context.args) != 1:
+        return "Usage: /rm <request name>"
 
+    # Check if name exists
+    name = context.args[0]
+    if name not in database.userRequests[user]:
+        return "%s doesn't exist, nothing changed." % name
+
+    # Remove
+    database.userRequests[user].pop(name, None)
+    database.save()
+
+    return "%s is successfully removed!" % name
 
 
 def nano(update, context):
