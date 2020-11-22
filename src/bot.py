@@ -1,7 +1,6 @@
 import logging
 
 import telegram
-from telegram.ext import Updater
 
 from src.commands import *
 from src.constants import token
@@ -25,6 +24,9 @@ if __name__ == '__main__':
     # Register commands
     commands = [start, ls, touch, rm, nano, test, interval, enable, disable]
     [dispatcher.add_handler(createCommand(cmd)) for cmd in commands]
+
+    # Init commands
+    init(bot, updater)
 
     # Start bot
     updater.start_polling()
