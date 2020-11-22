@@ -198,6 +198,25 @@ def interval(update: Update, context: CallbackContext):
     chat = update.effective_chat
     user = database.checkUser(chat.id)
 
+    # No args
+    if len(context.args) != 2:
+        return "Usage: /interval <request name> <interval in seconds>"
+
+    # Check if name exists
+    name = context.args[0]
+    if name not in database.userRequests[user]:
+        return "*Error:* %s doesn't exist." % name
+
+    # Validate the interval of the interval
+    i = int(context.args[1])
+    if i < 40 or i > 60*60*24:
+        return "*Error:* %s is too long or too short. (Min: 40s, Max: 60 * 60 * 24s)" % i
+
+    database.userRequests[user][name]['interval'] = i
+    database.save()
+
+    return "Success!"
+
 
 def enable(update: Update, context: CallbackContext):
     chat = update.effective_chat
