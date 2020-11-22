@@ -17,5 +17,6 @@ class Database:
     def checkUser(self, user):
         if user not in self.users:
             self.users.append(user)
-            self.userRequests[user] = []
-            self.userStatus[user] = []
+            self.userRequests[user] = {}
+            self.userStatus[user] = {}
+        return user

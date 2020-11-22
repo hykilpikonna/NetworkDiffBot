@@ -31,42 +31,42 @@ def start(update, context):
 
 def ls(update, context):
     chat = update.effective_chat
-    database.checkUser(chat.id)
-    requests = database.userRequests[chat.id]
+    user = database.checkUser(chat.id)
+    requests = database.userRequests[user]
 
-    return "Your requests: " + toJson(requests)
+    return "Your requests: %s" % toJson(requests)
 
 
 def touch(update, context):
     chat = update.effective_chat
-    database.checkUser(chat.id)
+    user = database.checkUser(chat.id)
 
 
 def rm(update, context):
     chat = update.effective_chat
-    database.checkUser(chat.id)
+    user = database.checkUser(chat.id)
 
 
 def mv(update, context):
     chat = update.effective_chat
-    database.checkUser(chat.id)
+    user = database.checkUser(chat.id)
 
 
 def nano(update, context):
     chat = update.effective_chat
-    database.checkUser(chat.id)
+    user = database.checkUser(chat.id)
 
 
 def interval(update, context):
     chat = update.effective_chat
-    database.checkUser(chat.id)
+    user = database.checkUser(chat.id)
 
 
 def enable(update, context):
     chat = update.effective_chat
-    database.checkUser(chat.id)
+    user = database.checkUser(chat.id)
 
 
 def disable(update, context):
     chat = update.effective_chat
-    database.checkUser(chat.id)
+    user = database.checkUser(chat.id)
