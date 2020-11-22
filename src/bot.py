@@ -37,6 +37,13 @@ if __name__ == '__main__':
     # Register commands
     dispatcher.add_handler(CommandHandler('start', start))
     dispatcher.add_handler(CommandHandler('ls', ls))
+    dispatcher.add_handler(CommandHandler('touch', touch))
+    dispatcher.add_handler(CommandHandler('rm', rm))
+    dispatcher.add_handler(CommandHandler('mv', mv))
+    dispatcher.add_handler(CommandHandler('nano', nano))
+    dispatcher.add_handler(CommandHandler('interval', interval))
+    dispatcher.add_handler(CommandHandler('enable', enable))
+    dispatcher.add_handler(CommandHandler('disable', disable))
 
     # Start bot
     updater.start_polling()

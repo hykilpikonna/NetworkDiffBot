@@ -6,4 +6,4 @@ mv - Rename a http request
 nano - Edit a http request
 interval - Change the interval between the updates of a http request
 enable - Start listening to a http request
-stop - Stop listening to a http request
+disable - Stop listening to a http request

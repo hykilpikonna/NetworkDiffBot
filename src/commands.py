@@ -18,7 +18,7 @@ Welcome! This bot monitors http changes!
 
 *Start/Stop Commands*
 /enable - Start listening to a http request
-/stop - Stop listening to a http request
+/disable - Stop listening to a http request
 """
 
 
@@ -37,3 +37,38 @@ def ls(update, context):
     requests = database.userRequests[chat.id]
 
     context.bot.send_message(chat_id=update.effective_chat.id, text="Your requests: " + toJson(requests))
+
+
+def touch(update, context):
+    chat = update.effective_chat
+    database.checkUser(chat.id)
+
+
+def rm(update, context):
+    chat = update.effective_chat
+    database.checkUser(chat.id)
+
+
+def mv(update, context):
+    chat = update.effective_chat
+    database.checkUser(chat.id)
+
+
+def nano(update, context):
+    chat = update.effective_chat
+    database.checkUser(chat.id)
+
+
+def interval(update, context):
+    chat = update.effective_chat
+    database.checkUser(chat.id)
+
+
+def enable(update, context):
+    chat = update.effective_chat
+    database.checkUser(chat.id)
+
+
+def disable(update, context):
+    chat = update.effective_chat
+    database.checkUser(chat.id)
