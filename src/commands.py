@@ -222,6 +222,20 @@ def enable(update: Update, context: CallbackContext):
     chat = update.effective_chat
     user = database.checkUser(chat.id)
 
+    # No args
+    if len(context.args) != 1:
+        return "Usage: /enable <request name>"
+
+    # Check if name exists
+    name = context.args[0]
+    if name not in database.userRequests[user]:
+        return "*Error:* %s doesn't exist." % name
+
+    # Start task
+    startTask(user, name)
+
+    return "Started!"
+
 
 def disable(update: Update, context: CallbackContext):
     chat = update.effective_chat
