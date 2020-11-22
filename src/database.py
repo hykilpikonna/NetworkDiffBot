@@ -1,4 +1,5 @@
 import json
+import os
 
 from src.constants import dbPath
 from src.utils import toJson
@@ -9,11 +10,20 @@ class Database:
         self.users = []
         self.userRequests = {}
         self.userStatus = {}
+        self.load()
 
     def save(self):
         f = open(dbPath, 'w')
         f.write(toJson(self))
         f.close()
+
+    def load(self):
+        if os.path.isfile(dbPath):
+            f = open(dbPath, 'r')
+            database = json.loads(f.read())
+            self.__dict__ = database
+            f.close()
+            print("Database loaded.")
 
     def checkUser(self, user):
         if user not in self.users:
