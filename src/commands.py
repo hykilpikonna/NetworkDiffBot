@@ -240,3 +240,24 @@ def enable(update: Update, context: CallbackContext):
 def disable(update: Update, context: CallbackContext):
     chat = update.effective_chat
     user = database.checkUser(chat.id)
+
+    # No args
+    if len(context.args) != 1:
+        return "Usage: /disable <request name>"
+
+    # Check if name is running
+    name = context.args[0]
+    if user not in tasks or name not in tasks[user]:
+        return "*Error:* %s isn't enabled." % name
+
+    # Stop and remove task
+    job = tasks[user][name]
+    job.enabled = False
+    job.schedule_removal()
+    tasks[user].pop(name, None)
+    database.userStatus[user]['enabledTasks'].remove(name)
+    database.save()
+
+    return "Removed!"
+
+
