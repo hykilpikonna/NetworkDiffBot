@@ -1,3 +1,5 @@
+import re
+
 from src.bot import database
 from src.utils import toJson
 
@@ -20,6 +22,14 @@ Welcome! This bot monitors http changes!
 /enable - Start listening to a http request
 /disable - Stop listening to a http request
 """
+
+# https://stackoverflow.com/a/7160778/7346633
+urlValidator = re.compile(
+    r'^(?:http|ftp)s?://'  # http:// or https://
+    r'(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+(?:[A-Z]{2,6}\.?|[A-Z0-9-]{2,}\.?)|'  # domain...
+    r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})'  # ...or ip
+    r'(?::\d+)?'  # optional port
+    r'(?:/?|[/?]\S+)$', re.IGNORECASE)
 
 
 def start(update, context):
@@ -53,6 +63,10 @@ def touch(update, context):
     if name in database.userRequests[user]:
         return "%s 已经存在w" % name
 
+    # Validate url
+    url = context.args[1]
+    if re.match(urlValidator, url) is None:
+        return "%s 格式检查不通过w" % url
 
 def rm(update, context):
     chat = update.effective_chat
