@@ -1,4 +1,5 @@
 import re
+from io import BytesIO
 
 from src.database import Database
 from src.utils import toJson, create
@@ -109,6 +110,24 @@ def nano(update, context):
 def test(update, context):
     chat = update.effective_chat
     user = database.checkUser(chat.id)
+
+    # No args
+    if len(context.args) != 1:
+        return "Usage: /test <request name>"
+
+    # Check if name exists
+    name = context.args[0]
+    if name not in database.userRequests[user]:
+        return "*Error:* %s doesn't exist." % name
+
+    # Run
+    r = create(database.userRequests[user][name])
+    body = r.text
+    if len(body) > 60000:
+        return "File too large (>60kb)."
+
+    context.bot.send_document(chat_id=chat.id, document=BytesIO(bytes(r.text, 'utf-8')), filename=name + '.txt')
+    return 'Done!'
 
 
 def interval(update, context):
