@@ -36,6 +36,15 @@ urlValidator = re.compile(
     r'(?:/?|[/?]\S+)$', re.IGNORECASE)
 
 database = Database()
+tasks: {str: {str: Job}} = {}
+cache: {str: {str: str}} = {}
+updater: Updater = {}
+
+
+# Initialize bot
+def init(bot: Bot, u: Updater):
+    global updater
+    updater = u
 
 
 def start(update: Update, context: CallbackContext):
