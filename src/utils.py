@@ -56,3 +56,25 @@ def dictToString(obj, indent=4, indentLevel=1) -> str:
                 result += str(v) + '\n'
 
         return result + ' ' * (indent * (indentLevel - 1)) + '}'
+
+    # List
+    else:
+        if len(obj) == 0:
+            return '[]'
+
+        result = '[\n'
+
+        for v in obj:
+            result += ' ' * (indent * indentLevel)
+
+            # Dict inside list
+            if type(v) == dict:
+                result += dictToString(v, indentLevel=indentLevel + 1) + '\n'
+
+            elif type(v) == str:
+                result += '"' + v.replace('\n', '\\n') + '"\n'
+
+            else:
+                result += str(v) + '\n'
+
+        return result + ' ' * (indent * (indentLevel - 1)) + ']'
