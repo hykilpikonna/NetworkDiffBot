@@ -17,8 +17,8 @@ def createCommand(method):
         data = method(update, context)
 
         # Send back data if not null
-        if data is not None and data is not '':
-            context.bot.send_message(chat_id=update.effective_chat.id, text=data)
+        if data is not None and data != '':
+            context.bot.send_message(chat_id=update.effective_chat.id, text=data, parse_mode="markdown")
 
     # Create handler for the wrapper command
     return CommandHandler(method.__name__, command, run_async=True)
