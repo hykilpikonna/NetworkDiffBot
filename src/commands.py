@@ -76,6 +76,20 @@ def createTaskCallback(user: str, taskName: str, request):
     return task
 
 
+def startTask(user: str, taskName: str):
+    request = database.userRequests[user][taskName]
+    if user not in tasks:
+        tasks[user] = {}
+
+    tasks[user][taskName] = updater.job_queue.run_repeating(createTaskCallback(user, taskName, request),
+                                                            interval=request.get('interval', 120), first=0)
+
+    # Keep record
+    if taskName not in database.userStatus[user]['enabledTasks']:
+        database.userStatus[user]['enabledTasks'].append(taskName)
+        database.save()
+
+
 # Initialize bot
 def init(bot: Bot, u: Updater):
     global updater
