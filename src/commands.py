@@ -2,6 +2,7 @@ import re
 
 from src.bot import database
 from src.utils import toJson
+from src.request_configuration import RequestConfiguration
 
 helpMsg = """
 Welcome! This bot monitors http changes!
@@ -67,6 +68,10 @@ def touch(update, context):
     url = context.args[1]
     if re.match(urlValidator, url) is None:
         return "%s 格式检查不通过w" % url
+
+    # Create
+    database.userRequests[user][name] = RequestConfiguration(url)
+
 
 def rm(update, context):
     chat = update.effective_chat
