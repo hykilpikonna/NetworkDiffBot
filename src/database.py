@@ -13,3 +13,9 @@ class Database:
         f = open(dbPath, 'w')
         f.write(toJson(self))
         f.close()
+
+    def checkUser(self, user):
+        if user not in self.users:
+            self.users.append(user)
+            self.userRequests[user] = []
+            self.userStatus[user] = []
