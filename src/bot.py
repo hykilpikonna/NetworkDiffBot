@@ -1,13 +1,10 @@
-import json
+import logging
 
 import telegram
-from telegram.ext import CommandHandler
 from telegram.ext import Updater
-import logging
-import os
 
 from src.commands import *
-from src.constants import dbPath, token
+from src.constants import token
 from src.utils import createCommand
 
 # Main

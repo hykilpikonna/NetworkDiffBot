@@ -1,5 +1,6 @@
 import json
 
+import requests
 from telegram.ext import CommandHandler
 
 
@@ -22,3 +23,8 @@ def createCommand(method):
 
     # Create handler for the wrapper command
     return CommandHandler(method.__name__, command, run_async=True)
+
+
+# Create and execute http request
+def create(req):
+    return requests.request(req['method'], req['url'], headers=req.get('headers', {}), data=req.get('payload', None))

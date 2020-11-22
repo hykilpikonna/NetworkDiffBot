@@ -1,8 +1,7 @@
 import re
 
 from src.database import Database
-from src.utils import toJson
-from src.request_configuration import RequestConfiguration
+from src.utils import toJson, create
 
 helpMsg = """
 Welcome! This bot monitors http changes!
@@ -76,7 +75,7 @@ def touch(update, context):
         return "*Error:* %s cannot pass the format check" % url
 
     # Create
-    database.userRequests[user][name] = RequestConfiguration(url)
+    database.userRequests[user][name] = {'method': 'GET', 'url': url, 'headers': {}, 'data': None}
     database.save()
 
     return "%s is successfully created!" % name
