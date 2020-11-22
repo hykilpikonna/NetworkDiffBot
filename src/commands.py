@@ -54,6 +54,10 @@ def touch(update, context):
     chat = update.effective_chat
     user = database.checkUser(chat.id)
 
+    # Too many requests
+    if len(database.userRequests[user]) > 10:
+        return "*Error:* One user can only have 10 requests for now ;-;"
+
     # No args
     if len(context.args) != 2:
         return "Usage: /touch <request name> <proper url>"
