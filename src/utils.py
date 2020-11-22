@@ -1,4 +1,5 @@
 import json
+from typing import Union
 
 import requests
 from telegram.ext import CommandHandler
@@ -28,3 +29,30 @@ def createCommand(method):
 # Create and execute http request
 def create(req):
     return requests.request(req['method'], req['url'], headers=req.get('headers', {}), data=req.get('payload', None))
+
+
+# Convert json to more readable formats
+def dictToString(obj, indent=4, indentLevel=1) -> str:
+    if type(obj) == dict:
+        if len(obj) == 0:
+            return '{}'
+
+        result = '{\n'
+
+        for (k, v) in obj.items():
+            result += ' ' * (indent * indentLevel) + k + ': '
+
+            # Dict inside dict
+            if type(v) == dict or type(v) == list:
+                if len(v) != 0:
+                    result += '\n' + ' ' * (indent * indentLevel)
+                result += dictToString(v, indentLevel=indentLevel + 1) + '\n'
+
+            elif type(v) == str:
+                result += '"' + v.replace('\n', '\\n') + '"\n'
+
+            # Regular value
+            else:
+                result += str(v) + '\n'
+
+        return result + ' ' * (indent * (indentLevel - 1)) + '}'
