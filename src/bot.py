@@ -27,3 +27,6 @@ if __name__ == '__main__':
 
     # Register commands
     dispatcher.add_handler(CommandHandler('start', start))
+
+    # Start bot
+    updater.start_polling()
