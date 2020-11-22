@@ -1,3 +1,5 @@
+import json
+
 import telegram
 from telegram.ext import CommandHandler
 from telegram.ext import Updater
@@ -5,15 +7,22 @@ import logging
 import os
 
 from src.commands import start
+from src.database import Database
 
-# Read token from an environment variable
-token=os.environ['TG_TOKEN']
+token = os.environ['TG_TOKEN']
+dbPath = 'database.json'
+database = Database()
 
 # Main
 if __name__ == '__main__':
-
     #  Initialize logger
     logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
+
+    # Check database
+    if os.path.isfile(dbPath):
+        f = open(dbPath, 'r')
+        database = json.loads(f.read())
+        f.close()
 
     # Create bot
     bot = telegram.Bot(token=os.environ['TG_TOKEN'])
