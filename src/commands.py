@@ -1,11 +1,13 @@
+import difflib
+import json
 import re
 from io import BytesIO
 
 from telegram import Bot, Update
-from telegram.ext import Updater, CallbackContext
+from telegram.ext import Updater, CallbackContext, Job
 
 from src.database import Database
-from src.utils import toJson, create
+from src.utils import toJson, create, dictToString
 
 helpMsg = """
 Welcome! This bot monitors http changes!
@@ -39,6 +41,15 @@ database = Database()
 tasks: {str: {str: Job}} = {}
 cache: {str: {str: str}} = {}
 updater: Updater = {}
+
+
+def sendRequest(req: str):
+    r = create(req)
+    text = r.text
+    if r.headers['Content-Type'] == 'application/json':
+        text = dictToString(json.loads(text))
+    r.close()
+    return text
 
 
 # Initialize bot
@@ -133,12 +144,12 @@ def test(update: Update, context: CallbackContext):
         return "*Error:* %s doesn't exist." % name
 
     # Run
-    r = create(database.userRequests[user][name])
-    body = r.text
-    if len(body) > 60000:
+    text = sendRequest(database.userRequests[user][name])
+
+    if len(text) > 60000:
         return "File too large (>60kb)."
 
-    context.bot.send_document(chat_id=chat.id, document=BytesIO(bytes(r.text, 'utf-8')), filename=name + '.txt')
+    context.bot.send_document(chat_id=chat.id, document=BytesIO(bytes(text, 'utf-8')), filename=name + '.txt')
     return 'Done!'
 
 
