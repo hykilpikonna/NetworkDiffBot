@@ -59,21 +59,21 @@ def touch(update, context):
     # Validate name
     name = context.args[0]
     if not name.isalnum():
-        return "You can only use alphanumeric names!"
+        return "*Error:* You can only use alphanumeric names!"
 
     if name in database.userRequests[user]:
-        return "%s already exists" % name
+        return "*Error:* %s already exists" % name
 
     # Validate url
     url = context.args[1]
     if re.match(urlValidator, url) is None:
-        return "%s cannot pass the format check" % url
+        return "*Error:* %s cannot pass the format check" % url
 
     # Create
     database.userRequests[user][name] = RequestConfiguration(url)
     database.save()
 
-    return "%s is successfully created!" % name
+    return "*%s* is successfully created!" % name
 
 
 def rm(update, context):
