@@ -5,9 +5,10 @@ from src.utils import toJson
 
 
 class Database:
-    users = []
-    userRequests = {}
-    userStatus = {}
+    def __init__(self):
+        self.users = []
+        self.userRequests = {}
+        self.userStatus = {}
 
     def save(self):
         f = open(dbPath, 'w')
