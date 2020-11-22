@@ -1,4 +1,6 @@
-# Help message
+from src.bot import database
+from src.utils import toJson
+
 helpMsg = """
 Welcome! This bot monitors http changes!
 
@@ -21,4 +23,17 @@ Welcome! This bot monitors http changes!
 
 
 def start(update, context):
-    context.bot.send_message(chat_id=update.effective_chat.id, text=helpMsg, parse_mode="markdown")
+    chat = update.effective_chat
+    database.checkUser(chat.id)
+
+    # Send help
+    context.bot.send_message(chat_id=chat.id, text=helpMsg, parse_mode="markdown")
+
+
+def ls(update, context):
+    chat = update.effective_chat
+    database.checkUser(chat.id)
+
+    requests = database.userRequests[chat.id]
+
+    context.bot.send_message(chat_id=update.effective_chat.id, text="Your requests: " + toJson(requests))
