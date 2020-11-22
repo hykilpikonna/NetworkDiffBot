@@ -9,7 +9,7 @@ import os
 from src.commands import *
 from src.constants import dbPath, token
 from src.database import Database
-
+from src.utils import createCommand
 
 database = Database()
 
@@ -35,15 +35,8 @@ if __name__ == '__main__':
     dispatcher = updater.dispatcher
 
     # Register commands
-    dispatcher.add_handler(CommandHandler('start', start))
-    dispatcher.add_handler(CommandHandler('ls', ls))
-    dispatcher.add_handler(CommandHandler('touch', touch))
-    dispatcher.add_handler(CommandHandler('rm', rm))
-    dispatcher.add_handler(CommandHandler('mv', mv))
-    dispatcher.add_handler(CommandHandler('nano', nano))
-    dispatcher.add_handler(CommandHandler('interval', interval))
-    dispatcher.add_handler(CommandHandler('enable', enable))
-    dispatcher.add_handler(CommandHandler('disable', disable))
+    commands = [start, ls, touch, rm, mv, nano, interval, enable, disable]
+    [dispatcher.add_handler(createCommand(cmd)) for cmd in commands]
 
     # Start bot
     updater.start_polling()
