@@ -1,6 +1,6 @@
 import json
 
-from src.bot import dbPath
+from src.constants import dbPath
 
 
 class Database:

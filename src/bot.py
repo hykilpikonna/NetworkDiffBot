@@ -6,11 +6,11 @@ from telegram.ext import Updater
 import logging
 import os
 
-from src.commands import start
+from src.commands import *
+from src.constants import dbPath, token
 from src.database import Database
 
-token = os.environ['TG_TOKEN']
-dbPath = 'database.json'
+
 database = Database()
 
 # Main
@@ -25,7 +25,7 @@ if __name__ == '__main__':
         f.close()
 
     # Create bot
-    bot = telegram.Bot(token=os.environ['TG_TOKEN'])
+    bot = telegram.Bot(token=token)
 
     # Print bot info
     print("Bot created: ", bot.getMe())
