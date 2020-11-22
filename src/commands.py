@@ -52,6 +52,30 @@ def sendRequest(req: str):
     return text
 
 
+def createTaskCallback(user: str, taskName: str, request):
+    if user not in cache:
+        cache[user] = {}
+
+    def task(context: CallbackContext):
+        print('request sent!')
+
+        # Send request
+        text = sendRequest(request)
+
+        # First time http request
+        if taskName not in cache[user]:
+            cache[user][taskName] = text
+
+        # Compare diff
+        else:
+            diffRaw = difflib.unified_diff(cache[user][taskName].splitlines(1), text.splitlines(1), fromfile='before', tofile='after')
+            diff = ''.join(diffRaw)
+            cache[user][taskName] = text
+            if diff != '':
+                context.bot.send_message(chat_id=user, text='*%s Changed!*\n\n```diff\n%s```' % (taskName, diff), parse_mode="markdown")
+    return task
+
+
 # Initialize bot
 def init(bot: Bot, u: Updater):
     global updater
