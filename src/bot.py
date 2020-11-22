@@ -8,21 +8,12 @@ import os
 
 from src.commands import *
 from src.constants import dbPath, token
-from src.database import Database
 from src.utils import createCommand
-
-database = Database()
 
 # Main
 if __name__ == '__main__':
     #  Initialize logger
     logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
-
-    # Check database
-    if os.path.isfile(dbPath):
-        f = open(dbPath, 'r')
-        database = json.loads(f.read())
-        f.close()
 
     # Create bot
     bot = telegram.Bot(token=token)

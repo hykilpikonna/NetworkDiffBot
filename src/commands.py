@@ -1,6 +1,6 @@
 import re
 
-from src.bot import database
+from src.database import Database
 from src.utils import toJson
 from src.request_configuration import RequestConfiguration
 
@@ -31,6 +31,8 @@ urlValidator = re.compile(
     r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})'  # ...or ip
     r'(?::\d+)?'  # optional port
     r'(?:/?|[/?]\S+)$', re.IGNORECASE)
+
+database = Database()
 
 
 def start(update, context):
@@ -73,7 +75,7 @@ def touch(update, context):
     database.userRequests[user][name] = RequestConfiguration(url)
     database.save()
 
-    return "*%s* is successfully created!" % name
+    return "%s is successfully created!" % name
 
 
 def rm(update, context):
