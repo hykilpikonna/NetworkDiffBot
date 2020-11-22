@@ -1,3 +1,6 @@
+import telegram
+import logging
+import os
 
 helpMsg = """
 Welcome! This bot monitors http changes!
@@ -18,3 +21,16 @@ Welcome! This bot monitors http changes!
 /enable - Start listening to a http request
 /stop - Stop listening to a http request
 """
+
+# Main
+if __name__ == '__main__':
+
+    #  Initialize logger
+    logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
+
+    # Create bot with configurable token
+    bot = telegram.Bot(token=os.environ['TG_TOKEN'])
+
+    # Print bot info
+    print("Bot info: ", bot.getMe())
+
