@@ -50,6 +50,9 @@ def touch(update, context):
     if not name.isalnum():
         return "只能有数字或者字母哦w"
 
+    if name in database.userRequests[user]:
+        return "%s 已经存在w" % name
+
 
 def rm(update, context):
     chat = update.effective_chat
