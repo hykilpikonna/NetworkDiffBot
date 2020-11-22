@@ -54,23 +54,26 @@ def touch(update, context):
 
     # No args
     if len(context.args) != 2:
-        return "用法: /touch <request name> <proper url>"
+        return "Usage: /touch <request name> <proper url>"
 
     # Validate name
     name = context.args[0]
     if not name.isalnum():
-        return "只能有数字或者字母哦w"
+        return "You can only use alphanumeric names!"
 
     if name in database.userRequests[user]:
-        return "%s 已经存在w" % name
+        return "%s already exists" % name
 
     # Validate url
     url = context.args[1]
     if re.match(urlValidator, url) is None:
-        return "%s 格式检查不通过w" % url
+        return "%s cannot pass the format check" % url
 
     # Create
     database.userRequests[user][name] = RequestConfiguration(url)
+    database.save()
+
+    return "%s is successfully created!" % name
 
 
 def rm(update, context):
