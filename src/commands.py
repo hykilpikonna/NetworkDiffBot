@@ -7,7 +7,7 @@ from telegram import Bot, Update
 from telegram.ext import Updater, CallbackContext, Job
 
 from src.database import Database
-from src.utils import toJson, create, dictToString
+from src.utils import toJson, create, dictToString, render
 
 helpMsg = """
 Welcome! This bot monitors http changes!
@@ -57,8 +57,6 @@ def createTaskCallback(user: str, taskName: str, request):
         cache[user] = {}
 
     def task(context: CallbackContext):
-        print('request sent!')
-
         # Send request
         text = sendRequest(request)
 
@@ -72,7 +70,7 @@ def createTaskCallback(user: str, taskName: str, request):
             diff = ''.join(diffRaw)
             cache[user][taskName] = text
             if diff != '':
-                context.bot.send_message(chat_id=user, text='*%s Changed!*\n\n```diff\n%s```' % (taskName, diff), parse_mode="markdown")
+                context.bot.send_photo(chat_id=int(user), photo=BytesIO(render(diff)), caption='*%s Changed!*' % taskName, parse_mode='markdown')
     return task
 
 
