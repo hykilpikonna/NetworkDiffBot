@@ -1,7 +1,9 @@
 import json
-from typing import Union
 
 import requests
+from pygments import highlight as syntax_highlight
+from pygments.formatters import img
+from pygments.lexers import *
 from telegram.ext import CommandHandler
 
 
@@ -78,3 +80,11 @@ def dictToString(obj, indent=4, indentLevel=1) -> str:
                 result += str(v) + '\n'
 
         return result + ' ' * (indent * (indentLevel - 1)) + ']'
+
+
+def render(message):
+    lexer = get_lexer_by_name("diff", stripall=True)
+    # lexer = guess_lexer(message)
+    formatter = img.JpgImageFormatter(style="colorful")
+    result = syntax_highlight(message, lexer, formatter, outfile=None)
+    return result
