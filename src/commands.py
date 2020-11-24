@@ -1,3 +1,4 @@
+import datetime
 import difflib
 import json
 import re
@@ -66,11 +67,20 @@ def createTaskCallback(user: str, taskName: str, request):
 
         # Compare diff
         else:
+            # Generate diff
             diffRaw = difflib.unified_diff(cache[user][taskName].splitlines(1), text.splitlines(1), fromfile='before', tofile='after')
             diff = ''.join(diffRaw)
             cache[user][taskName] = text
+
             if diff != '':
-                context.bot.send_photo(chat_id=int(user), photo=BytesIO(render(diff)), caption='*%s Changed!*' % taskName, parse_mode='markdown')
+                # Render diff
+                doc = BytesIO(render(diff))
+                time = datetime.datetime.now().strftime('%b %d %Y %H-%M-%S')
+                fileName = 'diff %s %s.png' % (taskName, time)
+                caption = '*%s Changed!*' % taskName
+
+                # Send as file
+                context.bot.send_document(int(user), doc, fileName, caption, parse_mode='markdown')
     return task
 
 
