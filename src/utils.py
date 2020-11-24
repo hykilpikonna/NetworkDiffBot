@@ -1,4 +1,5 @@
 import json
+import textwrap
 from urllib.parse import unquote
 
 import requests
@@ -91,3 +92,7 @@ def render(message):
     formatter = ImageFormatter(font_name="sarasa-mono-cl-regular", style="colorful", font_size=12, line_pad=4)
     result = syntax_highlight(message, lexer, formatter, outfile=None)
     return result
+
+
+def wrap(string: str):
+    return '\n'.join([' ⏎\n  '.join(textwrap.wrap(line, 120)) for line in string.splitlines()])
