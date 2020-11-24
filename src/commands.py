@@ -8,7 +8,7 @@ from telegram import Bot, Update
 from telegram.ext import Updater, CallbackContext, Job
 
 from src.database import Database
-from src.utils import toJson, create, dictToString, render
+from src.utils import toJson, create, dictToString, render, wrap
 
 helpMsg = """
 Welcome! This bot monitors http changes!
@@ -59,7 +59,7 @@ def createTaskCallback(user: str, taskName: str, request):
 
     def task(context: CallbackContext):
         # Send request
-        text = sendRequest(request)
+        text = wrap(sendRequest(request))
 
         # First time http request
         if taskName not in cache[user]:
