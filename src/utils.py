@@ -1,4 +1,5 @@
 import json
+from urllib.parse import unquote
 
 import requests
 from pygments import highlight as syntax_highlight
@@ -83,6 +84,7 @@ def dictToString(obj, indent=4, indentLevel=1) -> str:
 
 
 def render(message):
+    message = unquote(message)
     lexer = get_lexer_by_name("diff", stripall=True)
     # lexer = guess_lexer(message)
     formatter = img.JpgImageFormatter(style="colorful")
