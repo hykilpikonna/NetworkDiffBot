@@ -4,6 +4,7 @@ from urllib.parse import unquote
 import requests
 from pygments import highlight as syntax_highlight
 from pygments.formatters import img
+from pygments.formatters.img import ImageFormatter
 from pygments.lexers import *
 from telegram.ext import CommandHandler
 
@@ -87,6 +88,6 @@ def render(message):
     message = unquote(message)
     lexer = get_lexer_by_name("diff", stripall=True)
     # lexer = guess_lexer(message)
-    formatter = img.JpgImageFormatter(style="colorful")
+    formatter = ImageFormatter(font_name="sarasa-mono-cl-regular", style="colorful", font_size=12, line_pad=4)
     result = syntax_highlight(message, lexer, formatter, outfile=None)
     return result
