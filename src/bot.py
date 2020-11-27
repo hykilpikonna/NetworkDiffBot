@@ -2,6 +2,7 @@ import logging
 import time
 
 import telegram
+from telegram.utils.request import Request
 
 from src.commands import *
 from src.constants import token
@@ -14,7 +15,8 @@ if __name__ == '__main__':
     logging.getLogger('apscheduler.executors.default').propagate = False
 
     # Create bot
-    bot = telegram.Bot(token=token)
+    request = Request(con_pool_size=8)
+    bot = telegram.Bot(token=token, request=request)
 
     # Print bot info
     print("Bot created: ", bot.getMe())
