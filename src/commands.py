@@ -190,7 +190,7 @@ def enable(update: Update, context: CallbackContext):
         return "*Error:* %s doesn't exist." % name
 
     # Start task
-    if not scheduler.start(user, database.reqs[user][name]):
+    if not scheduler.start(user, name):
         return "*Error:* %s is already enabled." % name
 
     return "Started!"
