@@ -107,7 +107,7 @@ def touch(update: Update, context: CallbackContext):
         return "*Error:* %s cannot pass the format check" % url
 
     # Create
-    database.userRequests[user][name] = {'method': 'GET', 'url': url, 'headers': {}, 'data': None}
+    database.userRequests[user][name] = {'method': 'GET', 'url': url, 'headers': {}, 'data': None, 'enabled': False}
     database.save()
 
     return "%s is successfully created!" % name
@@ -198,8 +198,12 @@ def enable(update: Update, context: CallbackContext):
     if name not in database.userRequests[user]:
         return "*Error:* %s doesn't exist." % name
 
+    # Check if name is enabled
+    if scheduler.isStarted(user, name):
+        return "*Error:* %s is already enabled." % name
+
     # Start task
-    startTask(user, name)
+    scheduler.start(user, database.userRequests[user][name])
 
     return "Started!"
 
