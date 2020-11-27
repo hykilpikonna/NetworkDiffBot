@@ -1,4 +1,5 @@
 import logging
+import time
 
 import telegram
 
@@ -30,3 +31,7 @@ if __name__ == '__main__':
 
     # Start bot
     updater.start_polling()
+
+    # Keep alive
+    while True:
+        time.sleep(5)
