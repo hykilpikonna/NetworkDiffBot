@@ -9,7 +9,7 @@ from telegram.ext import Updater, CallbackContext, Job
 
 from src.database import Database
 from src.scheduler import Scheduler
-from src.utils import toJson, create, dictToString, render, wrap
+from src.utils import toJson, create, dictToString, render, wrap, sendRequest
 
 helpMsg = """
 Welcome! This bot monitors http changes!
@@ -44,15 +44,6 @@ scheduler: Scheduler
 updater: Updater
 
 
-def sendRequest(req: str):
-    r = create(req)
-    text = r.text
-    if r.headers['Content-Type'] == 'application/json':
-        text = dictToString(json.loads(text))
-    r.close()
-    return text
-
-
 # Initialize bot
 def init(bot: Bot, u: Updater):
     global updater
@@ -63,7 +54,7 @@ def init(bot: Bot, u: Updater):
     for user in database.users:
         for request in database.reqs[user]:
             if request['enabled']:
-                scheduler.startTask(user, request)
+                scheduler.start(user, request)
 
 
 def start(update: Update, context: CallbackContext):

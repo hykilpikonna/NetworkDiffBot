@@ -1,3 +1,4 @@
+import difflib
 import json
 import textwrap
 from urllib.parse import unquote
@@ -96,3 +97,12 @@ def render(message):
 
 def wrap(string: str):
     return '\n'.join([' ⏎\n  '.join(textwrap.wrap(line, 120)) for line in string.splitlines()])
+
+
+def sendRequest(req):
+    response = create(req)
+    text = response.text
+    if response.headers['Content-Type'] == 'application/json':
+        text = dictToString(json.loads(text))
+    response.close()
+    return text

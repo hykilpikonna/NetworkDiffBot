@@ -4,9 +4,8 @@ from io import BytesIO
 
 from telegram.ext import Job, CallbackContext, Updater
 
-from src.commands import sendRequest
 from src.database import Database
-from src.utils import wrap, render
+from src.utils import wrap, render, sendRequest
 
 
 class Scheduler:
