@@ -8,6 +8,7 @@ from telegram import Bot, Update
 from telegram.ext import Updater, CallbackContext, Job
 
 from src.database import Database
+from src.scheduler import Scheduler
 from src.utils import toJson, create, dictToString, render, wrap
 
 helpMsg = """
@@ -39,9 +40,8 @@ urlValidator = re.compile(
     r'(?:/?|[/?]\S+)$', re.IGNORECASE)
 
 database = Database()
-tasks: {str: {str: Job}} = {}
-cache: {str: {str: str}} = {}
-updater: Updater = {}
+scheduler: Scheduler
+updater: Updater
 
 
 def sendRequest(req: str):
@@ -53,58 +53,17 @@ def sendRequest(req: str):
     return text
 
 
-def createTaskCallback(user: str, taskName: str, request):
-    if user not in cache:
-        cache[user] = {}
-
-    def task(context: CallbackContext):
-        # Send request
-        text = wrap(sendRequest(request))
-
-        # First time http request
-        if taskName not in cache[user]:
-            cache[user][taskName] = text
-
-        # Compare diff
-        else:
-            # Generate diff
-            diffRaw = difflib.unified_diff(cache[user][taskName].splitlines(1), text.splitlines(1), fromfile='before', tofile='after')
-            diff = ''.join(diffRaw)
-            cache[user][taskName] = text
-
-            if diff != '':
-                # Render diff
-                doc = BytesIO(render(diff))
-                time = datetime.datetime.now().strftime('%b %d %Y %H-%M-%S')
-                fileName = 'diff %s %s.png' % (taskName, time)
-                caption = '*%s Changed!*' % taskName
-
-                # Send as file
-                context.bot.send_document(int(user), doc, fileName, caption, parse_mode='markdown')
-    return task
-
-
-def startTask(user: str, taskName: str):
-    request = database.userRequests[user][taskName]
-    if user not in tasks:
-        tasks[user] = {}
-
-    tasks[user][taskName] = updater.job_queue.run_repeating(createTaskCallback(user, taskName, request),
-                                                            interval=request.get('interval', 120), first=0)
-
-    # Keep record
-    if taskName not in database.userStatus[user]['enabledTasks']:
-        database.userStatus[user]['enabledTasks'].append(taskName)
-        database.save()
-
-
 # Initialize bot
 def init(bot: Bot, u: Updater):
     global updater
     updater = u
+    global scheduler
+    scheduler = Scheduler(database, updater)
+
     for user in database.users:
-        for task in database.userStatus[user]['enabledTasks']:
-            startTask(user, task)
+        for request in database.userRequests[user]:
+            if request['enabled']:
+                scheduler.startTask(user, request)
 
 
 def start(update: Update, context: CallbackContext):
