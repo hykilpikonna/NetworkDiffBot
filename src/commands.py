@@ -5,8 +5,8 @@ from telegram import Bot, Update
 from telegram.ext import Updater, CallbackContext
 
 from src.database import Database
-from src.scheduler import Scheduler
-from src.utils import toJson, sendRequest
+from src.scheduler import Scheduler, CacheEntry
+from src.utils import sendRequest
 
 helpMsg = """
 Welcome! This bot monitors http changes!
@@ -66,7 +66,12 @@ def ls(update: Update, context: CallbackContext):
     user = database.checkUser(chat.id)
     requests = database.reqs[user]
 
-    return "Your requests: %s" % toJson(requests)
+    msg = '*Your requests:* \n```\n'
+    for name in requests:
+        msg += name + ' ' * (18 - len(name)) + requests[name]['url'] + '\n'
+    msg += '```'
+
+    return msg
 
 
 def touch(update: Update, context: CallbackContext):
