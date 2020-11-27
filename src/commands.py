@@ -61,7 +61,7 @@ def init(bot: Bot, u: Updater):
     scheduler = Scheduler(database, updater)
 
     for user in database.users:
-        for request in database.userRequests[user]:
+        for request in database.reqs[user]:
             if request['enabled']:
                 scheduler.startTask(user, request)
 
@@ -76,7 +76,7 @@ def start(update: Update, context: CallbackContext):
 def ls(update: Update, context: CallbackContext):
     chat = update.effective_chat
     user = database.checkUser(chat.id)
-    requests = database.userRequests[user]
+    requests = database.reqs[user]
 
     return "Your requests: %s" % toJson(requests)
 
@@ -86,7 +86,7 @@ def touch(update: Update, context: CallbackContext):
     user = database.checkUser(chat.id)
 
     # Too many requests
-    if len(database.userRequests[user]) > 10:
+    if len(database.reqs[user]) > 10:
         return "*Error:* One user can only have 10 requests for now ;-;"
 
     # No args
@@ -98,7 +98,7 @@ def touch(update: Update, context: CallbackContext):
     if not name.isalnum():
         return "*Error:* You can only use alphanumeric names!"
 
-    if name in database.userRequests[user]:
+    if name in database.reqs[user]:
         return "*Error:* %s already exists" % name
 
     # Validate url
@@ -107,7 +107,7 @@ def touch(update: Update, context: CallbackContext):
         return "*Error:* %s cannot pass the format check" % url
 
     # Create
-    database.userRequests[user][name] = {'method': 'GET', 'url': url, 'headers': {}, 'data': None, 'enabled': False}
+    database.reqs[user][name] = {'method': 'GET', 'url': url, 'headers': {}, 'data': None, 'enabled': False}
     database.save()
 
     return "%s is successfully created!" % name
@@ -123,11 +123,11 @@ def rm(update: Update, context: CallbackContext):
 
     # Check if name exists
     name = context.args[0]
-    if name not in database.userRequests[user]:
+    if name not in database.reqs[user]:
         return "%s doesn't exist, nothing changed." % name
 
     # Remove
-    database.userRequests[user].pop(name, None)
+    database.reqs[user].pop(name, None)
     database.save()
 
     return "%s is successfully removed!" % name
@@ -148,11 +148,11 @@ def test(update: Update, context: CallbackContext):
 
     # Check if name exists
     name = context.args[0]
-    if name not in database.userRequests[user]:
+    if name not in database.reqs[user]:
         return "*Error:* %s doesn't exist." % name
 
     # Run
-    text = sendRequest(database.userRequests[user][name])
+    text = sendRequest(database.reqs[user][name])
 
     if len(text) > 60000:
         return "File too large (>60kb)."
@@ -171,9 +171,9 @@ def interval(update: Update, context: CallbackContext):
 
     # Check if name exists
     name = context.args[0]
-    if name not in database.userRequests[user]:
+    if name not in database.reqs[user]:
         return "*Error:* %s doesn't exist." % name
-    request = database.userRequests[user][name]
+    request = database.reqs[user][name]
 
     # Validate the interval of the interval
     i = int(context.args[1])
@@ -197,11 +197,11 @@ def enable(update: Update, context: CallbackContext):
 
     # Check if name exists
     name = context.args[0]
-    if name not in database.userRequests[user]:
+    if name not in database.reqs[user]:
         return "*Error:* %s doesn't exist." % name
 
     # Start task
-    if not scheduler.start(user, database.userRequests[user][name]):
+    if not scheduler.start(user, database.reqs[user][name]):
         return "*Error:* %s is already enabled." % name
 
     return "Started!"

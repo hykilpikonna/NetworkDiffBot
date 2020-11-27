@@ -76,7 +76,7 @@ class Scheduler:
         job.enabled = False
         job.schedule_removal()
         self.tasks[user].pop(name, None)
-        self.database.userRequests[user][name]['enabled'] = False
+        self.database.reqs[user][name]['enabled'] = False
         self.database.save()
 
         return True
