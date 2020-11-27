@@ -99,9 +99,12 @@ def wrap(string: str):
 
 
 def sendRequest(req):
-    response = create(req)
-    text = response.text
-    if response.headers['Content-Type'] == 'application/json':
-        text = dictToString(json.loads(text))
-    response.close()
-    return text
+    try:
+        response = create(req)
+        text = response.text
+        if response.headers['Content-Type'] == 'application/json':
+            text = dictToString(json.loads(text))
+        response.close()
+        return text
+    except requests.exceptions.ConnectionError as e:
+        return "Error: ConnectionError!\n" + str(e)
