@@ -198,12 +198,9 @@ def enable(update: Update, context: CallbackContext):
     if name not in database.userRequests[user]:
         return "*Error:* %s doesn't exist." % name
 
-    # Check if name is enabled
-    if scheduler.isStarted(user, name):
-        return "*Error:* %s is already enabled." % name
-
     # Start task
-    scheduler.start(user, database.userRequests[user][name])
+    if not scheduler.start(user, database.userRequests[user][name]):
+        return "*Error:* %s is already enabled." % name
 
     return "Started!"
 
@@ -218,10 +215,8 @@ def disable(update: Update, context: CallbackContext):
 
     # Check if name is running
     name = context.args[0]
-    if not scheduler.isStarted(user, name):
+    if not scheduler.stop(user, name):
         return "*Error:* %s isn't enabled." % name
-
-    scheduler.stop(user, name)
 
     return "Removed!"
 
