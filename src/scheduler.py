@@ -58,6 +58,7 @@ class Scheduler:
 
             # Update cache
             cache.text = text
+            cache.time = now
 
             if diff != '':
                 # Render diff
