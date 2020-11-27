@@ -127,6 +127,7 @@ def rm(update: Update, context: CallbackContext):
         return "%s doesn't exist, nothing changed." % name
 
     # Remove
+    scheduler.stop(user, name)
     database.reqs[user].pop(name, None)
     database.save()
 
