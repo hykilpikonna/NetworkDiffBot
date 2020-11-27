@@ -1,4 +1,5 @@
 import re
+from datetime import datetime
 from io import BytesIO
 
 from telegram import Bot, Update
@@ -70,6 +71,13 @@ def ls(update: Update, context: CallbackContext):
     for name in requests:
         msg += name + ' ' * (18 - len(name)) + requests[name]['url'] + '\n'
     msg += '```'
+
+    if user in scheduler.storage:
+        msg += '\n*Enabled requests:* \n```\n'
+        for name in scheduler.storage[user]:
+            cache: CacheEntry = scheduler.storage[user][name]
+            msg += cache.name + ' ' * (18 - len(name)) + datetime.fromtimestamp(cache.time).strftime('%b %d %Y %H:%M:%S') + '\n'
+        msg += '```'
 
     return msg
 
