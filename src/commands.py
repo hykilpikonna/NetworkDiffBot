@@ -83,6 +83,8 @@ def touch(update: Update, context: CallbackContext):
 
     # Validate name
     name = context.args[0]
+    if len(name) > 16:
+        return "*Error:* Please use a shorter name."
     if not name.isalnum():
         return "*Error:* You can only use alphanumeric names!"
 
