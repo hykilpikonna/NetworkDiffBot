@@ -49,7 +49,7 @@ class Scheduler:
 
         return task
 
-    def startTask(self, user: str, request):
+    def start(self, user: str, request):
         name = request['name']
         if user not in self.tasks:
             self.tasks[user] = {}
@@ -60,4 +60,13 @@ class Scheduler:
         if not request['enabled']:
             request['enabled'] = True
             self.database.save()
+
+    def stop(self, user: str, name: str):
+        # Stop and remove task
+        job = self.tasks[user][name]
+        job.enabled = False
+        job.schedule_removal()
+        self.tasks[user].pop(name, None)
+        self.database.userRequests[user][name]['enabled'] = False
+        self.database.save()
 
