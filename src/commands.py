@@ -49,9 +49,9 @@ def init(bot: Bot, u: Updater):
     scheduler = Scheduler(database, updater)
 
     for user in database.users:
-        for request in database.reqs[user]:
-            if request['enabled']:
-                scheduler.start(user, request)
+        for name in database.reqs[user]:
+            if database.reqs[user][name]['enabled']:
+                scheduler.start(user, name)
 
 
 def start(update: Update, context: CallbackContext):
