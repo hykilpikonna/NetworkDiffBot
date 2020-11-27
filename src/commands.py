@@ -59,6 +59,10 @@ def start(update: Update, context: CallbackContext):
     chat = update.effective_chat
     database.checkUser(chat.id)
 
+    # Probably typed the wrong command
+    if len(context.args) > 0:
+        return enable(update, context)
+
     return helpMsg
 
 
