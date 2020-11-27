@@ -147,7 +147,6 @@ def test(update: Update, context: CallbackContext):
         return "File too large (>60kb)."
 
     context.bot.send_document(chat_id=chat.id, document=BytesIO(bytes(text, 'utf-8')), filename=name + '.txt')
-    return 'Done!'
 
 
 def interval(update: Update, context: CallbackContext):
