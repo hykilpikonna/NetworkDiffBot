@@ -70,3 +70,6 @@ class Scheduler:
         self.database.userRequests[user][name]['enabled'] = False
         self.database.save()
 
+    def isStarted(self, user: str, name: str):
+        return user in self.tasks and name in self.tasks[user]
+

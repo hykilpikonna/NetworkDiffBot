@@ -214,16 +214,10 @@ def disable(update: Update, context: CallbackContext):
 
     # Check if name is running
     name = context.args[0]
-    if user not in tasks or name not in tasks[user]:
+    if not scheduler.isStarted(user, name):
         return "*Error:* %s isn't enabled." % name
 
-    # Stop and remove task
-    job = tasks[user][name]
-    job.enabled = False
-    job.schedule_removal()
-    tasks[user].pop(name, None)
-    database.userStatus[user]['enabledTasks'].remove(name)
-    database.save()
+    scheduler.stop(user, name)
 
     return "Removed!"
 
