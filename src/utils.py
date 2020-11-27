@@ -5,7 +5,6 @@ from urllib.parse import unquote
 
 import requests
 from pygments import highlight as syntax_highlight
-from pygments.formatters import img
 from pygments.formatters.img import ImageFormatter
 from pygments.lexers import *
 from telegram.ext import CommandHandler

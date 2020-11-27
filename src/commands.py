@@ -1,15 +1,12 @@
-import datetime
-import difflib
-import json
 import re
 from io import BytesIO
 
 from telegram import Bot, Update
-from telegram.ext import Updater, CallbackContext, Job
+from telegram.ext import Updater, CallbackContext
 
 from src.database import Database
 from src.scheduler import Scheduler
-from src.utils import toJson, create, dictToString, render, wrap, sendRequest
+from src.utils import toJson, sendRequest
 
 helpMsg = """
 Welcome! This bot monitors http changes!
