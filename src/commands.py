@@ -166,8 +166,8 @@ def interval(update: Update, context: CallbackContext):
 
     # Validate the interval of the interval
     i = int(context.args[1])
-    if i < 40 or i > 60*60*24:
-        return "*Error:* %s is too long or too short. (Min: 40s, Max: 60 * 60 * 24s)" % i
+    if i < 40:
+        return "*Error:* %s is too long or too short. (Min: 40s)" % i
 
     request['interval'] = i
     database.save()
