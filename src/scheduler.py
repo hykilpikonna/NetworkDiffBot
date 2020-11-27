@@ -84,3 +84,10 @@ class Scheduler:
     def isStarted(self, user: str, name: str):
         return user in self.tasks and name in self.tasks[user]
 
+    def updateInterval(self, user: str, name: str, request):
+        if not self.isStarted(user, name):
+            return False
+
+        self.stop(user, name)
+        self.start(user, request)
+        return True
