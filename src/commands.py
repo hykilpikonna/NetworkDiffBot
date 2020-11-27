@@ -171,7 +171,7 @@ def interval(update: Update, context: CallbackContext):
 
     request['interval'] = i
     database.save()
-    scheduler.updateInterval(user, name, request)
+    scheduler.updateInterval(user, name)
 
     return "Success!"
 

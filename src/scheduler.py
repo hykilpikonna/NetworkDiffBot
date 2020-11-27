@@ -48,12 +48,11 @@ class Scheduler:
 
         return task
 
-    def start(self, user: str, request):
-        name = request['name']
-
+    def start(self, user: str, name: str):
         if self.isStarted(user, name):
             return False
 
+        request = self.database.reqs[user][name]
         if user not in self.tasks:
             self.tasks[user] = {}
 
@@ -83,10 +82,10 @@ class Scheduler:
     def isStarted(self, user: str, name: str):
         return user in self.tasks and name in self.tasks[user]
 
-    def updateInterval(self, user: str, name: str, request):
+    def updateInterval(self, user: str, name: str):
         if not self.isStarted(user, name):
             return False
 
         self.stop(user, name)
-        self.start(user, request)
+        self.start(user, name)
         return True
