@@ -32,7 +32,7 @@ class Scheduler:
         self.updater = updater
 
         # Start job
-        self.job = self.updater.job_queue.run_repeating(self.update, interval=5, first=0)
+        self.job = self.updater.job_queue.run_repeating(self.update, interval=20, first=0)
 
     # Update tasks
     def update(self, context: CallbackContext):
@@ -41,6 +41,8 @@ class Scheduler:
 
         # Function to update a single task
         def updateTask(cache: CacheEntry):
+            print("DEBUG: Sending request - %s" % cache.name, nowText)
+
             request = self.database.reqs[cache.user][cache.name]
             if now - cache.time < request.get('interval', 120):
                 return
@@ -70,8 +72,8 @@ class Scheduler:
                 context.bot.send_document(int(user), doc, fileName, caption, parse_mode='markdown')
 
         # Update all tasks
-        for user in self.storage:
-            for name in self.storage[user]:
+        for user in self.storage.keys():
+            for name in self.storage[user].keys():
                 updateTask(self.storage[user][name])
 
     # Start a task
