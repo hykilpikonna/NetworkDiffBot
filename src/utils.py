@@ -9,6 +9,8 @@ from pygments.formatters.img import ImageFormatter
 from pygments.lexers import *
 from telegram.ext import CommandHandler
 
+from src.constants import font
+
 
 def toJson(obj):
     return json.dumps(obj, default=lambda o: o.__dict__, sort_keys=True, indent=4)
@@ -89,7 +91,7 @@ def render(message):
     message = unquote(message)
     lexer = get_lexer_by_name("diff", stripall=True)
     # lexer = guess_lexer(message)
-    formatter = ImageFormatter(font_name="sarasa-mono-cl-regular", style="colorful", font_size=12, line_pad=4)
+    formatter = ImageFormatter(font_name=font, style="colorful", font_size=12, line_pad=4)
     result = syntax_highlight(message, lexer, formatter, outfile=None)
     return result
 
@@ -108,3 +110,29 @@ def sendRequest(req):
         return text
     except requests.exceptions.ConnectionError as e:
         return "Error: ConnectionError!\n" + str(e)
+
+
+if __name__ == '__main__':
+    before = wrap("""
+ <li><a href="Etterna-0.70.3-Darwin.dmg">Etterna-0.70.3-Darwin.dmg</a></li>
+ <li><a href="favicon-dark.svg">favicon-dark.svg</a></li>
+ <li><a href="Kant-%20short%20form%20%28no%20Kingdom%20of%20Ends%29.pdf">Kant- short form (no Kingdom of Ends).pdf</a></li>
+ <li><a href="kdeconnect-kde-master-985-macos-64-clang%20%281%29.dmg">kdeconnect-kde-master-985-macos-64-clang (1).dmg</a></li>
+ <li><a href="Keep/">Keep/</a></li>
+ <li><a href="Media/">Media/</a></li>
+ <li><a href="osu%21macOS%20Agent中文.app/">osu!macOS Agent中文.app/</a></li>""")
+    after = wrap("""
+ <li><a href="Etterna-0.70.3-Darwin.dmg">Etterna-0.70.3-Darwin.dmg</a></li>
+ <li><a href="favicon-dark.svg">favicon-dark.svg</a></li>
+ <li><a href="Kant-z%20short%20form%20%28no%20Kingdom%20of%20Ends%29.pdf">Kant- short form (no Kingdom of Ends).pdf</a></li>
+ <li><a href="kdeconnect-kde-master-985-macos-64-clang%20%281%29.dmg">kdeconnect-kde-master-985-macos-64-clang (111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111).dmg</a></li>
+ <li><a href="Keep/">Keep/</a></li>
+ <li><a href="Media/">Media/</a></li>
+ <li><a href="osu%21macOS%20Agent中文.app/">osu!macOS Agent中文.app/</a></li>""")
+
+    diffRaw = difflib.unified_diff(before.splitlines(1), after.splitlines(1))
+    diff = ''.join(diffRaw)
+    r = render(diff)
+    f = open('test.png', 'wb')
+    f.write(r)
+    f.close()
