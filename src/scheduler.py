@@ -41,8 +41,6 @@ class Scheduler:
 
         # Function to update a single task
         def updateTask(cache: CacheEntry):
-            print("DEBUG: Sending request - %s" % cache.name, nowText)
-
             request = self.database.reqs[cache.user][cache.name]
             if now - cache.time < request.get('interval', 120):
                 return
@@ -63,6 +61,8 @@ class Scheduler:
             cache.time = now
 
             if diff != '':
+                print("DEBUG: Diff detected - %s" % cache.name, nowText)
+
                 # Render diff
                 doc = BytesIO(render(diff))
                 fileName = 'diff %s %s.png' % (cache.name, nowText)
